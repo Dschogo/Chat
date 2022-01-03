@@ -13,7 +13,7 @@ body {
     overflow: hidden;
     background-color: transparent;
     color: white;
-    font-weight: 800;
+    font-weight: 600;
     word-break: break-word;
 }
 
@@ -52,4 +52,8 @@ body {
 
 .hidden {
     display: none;
+}
+
+.message {
+    color: rgb(229, 227, 223);
 }

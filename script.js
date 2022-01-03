@@ -25,7 +25,7 @@ Chat = {
         hideBadges: ('hide_badges' in $.QueryString ? ($.QueryString.hide_badges.toLowerCase() === 'true') : false),
         fade: ('fade' in $.QueryString ? parseInt($.QueryString.fade) : false),
         size: ('size' in $.QueryString ? parseInt($.QueryString.size) : 1),
-        font: ('font' in $.QueryString ? parseInt($.QueryString.font) : 1),
+        font: ('font' in $.QueryString ? parseInt($.QueryString.font) : 13),
         stroke: ('stroke' in $.QueryString ? parseInt($.QueryString.stroke) : false),
         delay: ('delay' in $.QueryString ? parseInt($.QueryString.delay) : 0),
         shadow: ('shadow' in $.QueryString ? parseInt($.QueryString.shadow) : false),
