@@ -196,9 +196,6 @@ Chat = {
                 });
             });
         });
-
-        console.log(Chat.info.cheers);
-
         callback(true);
     },
 
