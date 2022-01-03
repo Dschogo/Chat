@@ -24,7 +24,7 @@ Chat = {
         hideCommands: ('hide_commands' in $.QueryString ? ($.QueryString.hide_commands.toLowerCase() === 'true') : false),
         hideBadges: ('hide_badges' in $.QueryString ? ($.QueryString.hide_badges.toLowerCase() === 'true') : false),
         fade: ('fade' in $.QueryString ? parseInt($.QueryString.fade) : false),
-        size: ('size' in $.QueryString ? parseInt($.QueryString.size) : 3),
+        size: ('size' in $.QueryString ? parseInt($.QueryString.size) : 1),
         font: ('font' in $.QueryString ? parseInt($.QueryString.font) : 0),
         stroke: ('stroke' in $.QueryString ? parseInt($.QueryString.stroke) : false),
         delay: ('delay' in $.QueryString ? parseInt($.QueryString.delay) : 0),
@@ -556,5 +556,5 @@ Chat = {
 };
 
 $(document).ready(function() {
-    Chat.connect($.QueryString.channel ? $.QueryString.channel.toLowerCase() : 'giambaj');
+    Chat.connect($.QueryString.channel ? $.QueryString.channel.toLowerCase() : 'kdrkitten');
 });
