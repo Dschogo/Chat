@@ -19,6 +19,5 @@ function escapeHtml(message) {
 }
 
 function TwitchAPI(url) {
-    console.log(process.env.CLIENTID);
-    return $.getJSON(url + (url.search(/\?/) > -1 ? '&' : '?') + 'client_id=' + "p31p8buadkrrel3fdzq7268cq6q7li");
+    return $.getJSON(url + (url.search(/\?/) > -1 ? '&' : '?') + 'client_id=x09o6lppbx1ap67jy48qndctoc65q0');
 }
