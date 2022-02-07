@@ -34,14 +34,14 @@
 
 .emote {
     max-width: 75px;
-    max-height: 25px;
+    max-height: 30px;
     margin-right: -2px;
 }
 
 .upscale {
-    height: 25px;
+    height: 27px;
 }
 
 .emoji {
-    height: 22px;
+    height: 27px;
 }
