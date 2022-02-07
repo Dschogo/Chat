@@ -1,9 +1,9 @@
 #chat_container {
-    font-size: 16px;
+    font-size: 24px;
 }
 
 .chat_line {
-    line-height: 30px;
+    line-height: 34px;
 }
 
 .badge {
