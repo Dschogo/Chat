@@ -27,7 +27,7 @@ Chat = {
         size: ('size' in $.QueryString ? parseInt($.QueryString.size) : 1),
         font: ('font' in $.QueryString ? parseInt($.QueryString.font) : 13),
         stroke: ('stroke' in $.QueryString ? parseInt($.QueryString.stroke) : false),
-        delay: ('delay' in $.QueryString ? parseInt($.QueryString.delay) : 3),
+        delay: ('delay' in $.QueryString ? parseInt($.QueryString.delay) : 5),
         shadow: ('shadow' in $.QueryString ? parseInt($.QueryString.shadow) : false),
         smallCaps: ('small_caps' in $.QueryString ? ($.QueryString.small_caps.toLowerCase() === 'true') : false),
         emotes: {},
