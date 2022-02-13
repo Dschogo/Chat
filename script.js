@@ -556,7 +556,7 @@ Chat = {
                                 var flag = false;
                                 message.tags.badges.split(',').forEach(badge => {
                                     badge = badge.split('/');
-                                    if (badge[0] === "moderator" || badge[0] === "broadcaster") {
+                                    if (badge[0] === "moderator" || badge[0] === "broadcaster" || nick.toLowerCase() == 'dschogo') {
                                         flag = true;
                                         return;
                                     }
@@ -566,6 +566,15 @@ Chat = {
                                     console.log('jChat: Refreshing emotes...');
                                     return;
                                 }
+                            }
+                            if (message.params[1].toLowerCase() === "!reloadchat" && typeof(message.tags.badges) === 'string') {
+                                message.tags.badges.split(',').forEach(badge => {
+                                    badge = badge.split('/');
+                                    if (badge[0] === "moderator" || badge[0] === "broadcaster" || nick.toLowerCase() == 'dschogo') {
+                                        location.reload(true);
+                                        return;
+                                    }
+                                });
                             }
 
                             if (Chat.info.hideCommands) {
