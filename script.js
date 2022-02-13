@@ -40,7 +40,9 @@ Chat = {
         cheers: {},
         lines: [],
         blockedUsers: ('block' in $.QueryString ? $.QueryString.block.toLowerCase().split(',') : false),
-        bots: ['streamelements', 'streamlabs', 'nightbot', 'moobot', 'fossabot']
+        bots: ['streamelements', 'streamlabs', 'nightbot', 'moobot', 'fossabot'],
+        to_delete_mgs_ids: [],
+        to_delete_mgs_nicks: []
     },
 
     loadEmotes: function(channelID) {
@@ -94,7 +96,7 @@ Chat = {
     },
 
     load: function(callback) {
-        Chat.info.channelID = "430551896";
+        Chat.info.channelID = ($.QueryString.channel ? '111257869' : '430551896');
         Chat.loadEmotes(Chat.info.channelID);
 
         // Load CSS
@@ -307,6 +309,16 @@ Chat = {
             var $userInfo = $('<span></span>');
             $userInfo.addClass('user_info');
 
+            if (Chat.info.to_delete_mgs_ids.includes(info.id)) {
+                Chat.info.to_delete_mgs_ids = Chat.info.to_delete_mgs_ids.filter(item => item !== info.id)
+                return;
+            }
+            if (Chat.info.to_delete_mgs_nicks.includes(nick)) {
+                Chat.info.to_delete_mgs_nicks = Chat.info.to_delete_mgs_nicks.filter(item => item !== nick)
+                return;
+            }
+            
+
             // Writing badges
             if (Chat.info.hideBadges) {
                 if (typeof(info.badges) === 'string') {
@@ -467,15 +479,27 @@ Chat = {
         }
     },
 
-    clearChat: function(nick) {
+    clearChat: function(nick, iter=0) {
         setTimeout(function() {
-            $('.chat_line[data-nick=' + nick + ']').remove();
+            if ($('.chat_line[data-id=' + nick + ']').get().length > 0){
+                ($('.chat_line[data-id=' + nick + ']')).remove();
+            } else {
+                if (Chat.info.to_delete_mgs_nicks.includes(nick) && iter < Chat.info.delay * 5) {
+                    Chat.clearChat(nick, iter + 1);
+                }
+            }
         }, 200);
     },
 
-    clearMessage: function(id) {
+    clearMessage: function(id, iter=0) {
         setTimeout(function() {
-            $('.chat_line[data-id=' + id + ']').remove();
+            if ($('.chat_line[data-id=' + id + ']').get().length > 0){
+                ($('.chat_line[data-id=' + id + ']')).remove();
+            } else {
+                if (Chat.info.to_delete_mgs_ids.includes(id) && iter < Chat.info.delay * 5) {
+                    Chat.clearMessage(id, iter + 1);
+                }
+            }
         }, 200);
     },
 
@@ -487,7 +511,7 @@ Chat = {
         Chat.load(function() {
             console.log('jChat: Connecting to IRC server...');
             var socket = new ReconnectingWebSocket('wss://irc-ws.chat.twitch.tv', 'irc', { reconnectInterval: 2000 });
-
+            
             socket.onopen = function() {
                 console.log('jChat: Connected');
                 socket.send('PASS blah\r\n');
@@ -495,6 +519,8 @@ Chat = {
                 socket.send('CAP REQ :twitch.tv/commands twitch.tv/tags\r\n');
                 socket.send('JOIN #' + Chat.info.channel + '\r\n');
             };
+
+            
 
             socket.onclose = function() {
                 console.log('jChat: Disconnected');
@@ -514,7 +540,10 @@ Chat = {
                             console.log('jChat: Joined channel #' + Chat.info.channel);
                             return;
                         case "CLEARMSG":
-                            if (message.tags) Chat.clearMessage(message.tags['target-msg-id']);
+                            if (message.tags) {
+                                Chat.clearMessage(message.tags['target-msg-id']);
+                                Chat.info.to_delete_mgs_ids.push(message.tags['target-msg-id']);
+                            }
                             return;
                         case "CLEARCHAT":
                             if (message.params[1]) Chat.clearChat(message.params[1]);
