@@ -480,9 +480,10 @@ Chat = {
     },
 
     clearChat: function(nick, iter=0) {
+        console.log(nick + "  " + iter);
         setTimeout(function() {
-            if ($('.chat_line[data-id=' + nick + ']').get().length > 0){
-                ($('.chat_line[data-id=' + nick + ']')).remove();
+            if ($('.chat_line[data-nick=' + nick + ']').get().length > 0){
+                ($('.chat_line[data-nick=' + nick + ']')).remove();
             } else {
                 if (Chat.info.to_delete_mgs_nicks.includes(nick) && iter < Chat.info.delay * 5) {
                     Chat.clearChat(nick, iter + 1);
@@ -546,7 +547,10 @@ Chat = {
                             }
                             return;
                         case "CLEARCHAT":
-                            if (message.params[1]) Chat.clearChat(message.params[1]);
+                            if (message.params[1]) { 
+                                Chat.clearChat(message.params[1]);
+                                Chat.info.to_delete_mgs_nicks.push(message.params[1]);
+                            }
                             return;
                         case "PRIVMSG":
                             if (message.params[0] !== '#' + channel || !message.params[1]) return;
