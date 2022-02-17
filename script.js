@@ -16,13 +16,22 @@
     })(window.location.search.substr(1).split('&'))
 })(jQuery);
 
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+}
+
 Chat = {
     info: {
         channel: null,
         animate: ('animate' in $.QueryString ? ($.QueryString.animate.toLowerCase() === 'true') : false),
         showBots: ('bots' in $.QueryString ? ($.QueryString.bots.toLowerCase() === 'true') : true),
         hideCommands: ('hide_commands' in $.QueryString ? ($.QueryString.hide_commands.toLowerCase() === 'true') : false),
-        hideBadges: ('hide_badges' in $.QueryString ? ($.QueryString.hide_badges.toLowerCase() === 'true') : false),
+        hideBadges: ('hide_badges' in $.QueryString ? ($.QueryString.hide_badges.toLowerCase() === 'true') : true),
         fade: ('fade' in $.QueryString ? parseInt($.QueryString.fade) : false),
         size: ('size' in $.QueryString ? parseInt($.QueryString.size) : 1),
         font: ('font' in $.QueryString ? parseInt($.QueryString.font) : 13),
@@ -97,6 +106,7 @@ Chat = {
 
     load: function(callback) {
         Chat.info.channelID = ($.QueryString.channel ? '111257869' : '430551896');
+        // me 111257869
         Chat.loadEmotes(Chat.info.channelID);
 
         // Load CSS
@@ -187,7 +197,7 @@ Chat = {
         //     });
         // });
 
-        $.getJSON("https://raw.githubusercontent.com/Dschogo/Chat/master/badge_data.json").done(function(res) {
+        $.getJSON("https://raw.githubusercontent.com/Dschogo/Chat/master/cheer_data.json").done(function(res) {
             res.actions.forEach(action => {
                 Chat.info.cheers[action.prefix] = {}
                 action.tiers.forEach(tier => {
@@ -299,6 +309,10 @@ Chat = {
         });
     },
 
+    write_moni: function(nick, info, message) {
+        return;
+    },
+
     write: function(nick, info, message) {
         if (info) {
             var $chatLine = $('<div></div>');
@@ -408,13 +422,13 @@ Chat = {
             // Writing message
             var $message = $('<span></span>');
             $message.addClass('message');
+            
+            
             if (/^\x01ACTION.*\x01$/.test(message)) {
                 $message.css('color', color);
                 message = message.replace(/^\x01ACTION/, '').replace(/\x01$/, '').trim();
-                $userInfo.append('<span>&nbsp;</span>');
-            } else {
-                $userInfo.append('<span class="colon">:</span>');
             }
+            $userInfo.append('<span class="colon">:</span>');
             $chatLine.append($userInfo);
 
             // Replacing emotes and cheers
@@ -443,8 +457,6 @@ Chat = {
             if (info.bits && parseInt(info.bits) > 0) {
                 var bits = parseInt(info.bits);
                 var parsed = false;
-                console.log(message);
-                console.log(info);
                 for (cheerType of Object.entries(Chat.info.cheers)) {
                     var regex = new RegExp(cheerType[0] + "\\d+\\s*", 'ig');
                     if (message.search(regex) > -1) {
@@ -487,6 +499,15 @@ Chat = {
                     $container.append(messageNodes[i - 1], this);
                 }
             });
+
+            if (info.bits && parseInt(info.bits) > 0) {
+                $message.addClass('rainbow_text_animated');
+                var rgb_color = hexToRgb(color);
+                $message.removeClass('message');
+                $message.css('color', ('rgba(229, 227, 223,' + (info.bits < 1000 ? (1 - info.bits/1000) : 0) + ')'));
+                $message = $('<div></div>').append($message);
+                $message.addClass('fancy');
+            }
             $message.html($message.html().trim());
             $chatLine.append($message);
             Chat.info.lines.push($chatLine.wrap('<div>').parent().html());
@@ -494,7 +515,6 @@ Chat = {
     },
 
     clearChat: function(nick, iter=0) {
-        console.log(nick + "  " + iter);
         setTimeout(function() {
             if ($('.chat_line[data-nick=' + nick + ']').get().length > 0){
                 ($('.chat_line[data-nick=' + nick + ']')).remove();
@@ -567,7 +587,6 @@ Chat = {
                             }
                             return;
                         case "USERNOTICE":
-                            console.log(message);
                             return;
                         case "PRIVMSG":
                             if (message.params[0] !== '#' + channel || !message.params[1]) return;
