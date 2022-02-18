@@ -316,6 +316,8 @@ Chat = {
     write: function(nick, info, message) {
         if (info) {
             var $chatLine = $('<div></div>');
+
+            let message_raw = message;
             $chatLine.addClass('chat_line');
             $chatLine.attr('data-nick', nick);
             $chatLine.attr('data-time', Date.now());
@@ -508,6 +510,15 @@ Chat = {
                 $message = $('<div></div>').append($message);
                 $message.addClass('fancy');
             }
+
+            if (nick.toLowerCase() == 'streamlabs' && (message_raw.includes("verschenkt") || message_raw.includes("subscribed"))) {
+                $message.addClass('rainbow_text_animated');
+                $message.removeClass('message');
+                $message.css('color', 'rgba(229, 227, 223, 0)');
+                $message = $('<div></div>').append($message);
+                $message.addClass('fancy');
+            }
+
             $message.html($message.html().trim());
             $chatLine.append($message);
             Chat.info.lines.push($chatLine.wrap('<div>').parent().html());
