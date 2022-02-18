@@ -408,7 +408,8 @@ Chat = {
 
             var cool_bois = ['dschogo',
                             'kdrshromp',
-                            'kdrkitten'
+                            'kdrkitten',
+                            'zeotron69'
                         ]
             if (cool_bois.includes(nick.toLowerCase())) {
                 $username.addClass('rainbow_text_animated');
