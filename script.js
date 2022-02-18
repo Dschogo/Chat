@@ -512,7 +512,7 @@ Chat = {
                 $message.addClass('fancy');
             }
 
-            if (nick.toLowerCase() == 'streamlabs' && (message_raw.includes("verschenkt") || message_raw.includes("subscribed"))) {
+            if (nick.toLowerCase() == 'streamlabs' && (message_raw.includes("verschenkt") || message_raw.includes("subscribed") || message_raw.includes("donated"))) {
                 $message.addClass('rainbow_text_animated');
                 $message.removeClass('message');
                 $message.css('color', 'rgba(229, 227, 223, 0)');
