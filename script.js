@@ -426,9 +426,11 @@ Chat = {
             var $message = $('<span></span>');
             $message.addClass('message');
             
+
+            var action = /^\x01ACTION.*\x01$/.test(message);
             
-            if (/^\x01ACTION.*\x01$/.test(message)) {
-                $message.css('color', color);
+            if (action) {
+                $message.css('color', color); 
                 message = message.replace(/^\x01ACTION/, '').replace(/\x01$/, '').trim();
             }
             $userInfo.append('<span class="colon">:</span>');
@@ -505,7 +507,6 @@ Chat = {
 
             if (info.bits && parseInt(info.bits) > 0) {
                 $message.addClass('rainbow_text_animated');
-                var rgb_color = hexToRgb(color);
                 $message.removeClass('message');
                 $message.css('color', ('rgba(229, 227, 223,' + (info.bits < 1000 ? (1 - info.bits/1000) : 0) + ')'));
                 $message = $('<div></div>').append($message);
@@ -515,6 +516,13 @@ Chat = {
             if (nick.toLowerCase() == 'streamlabs' && (message_raw.includes("verschenkt") || message_raw.includes("subscribed") || message_raw.includes("donated"))) {
                 $message.addClass('rainbow_text_animated');
                 $message.removeClass('message');
+                $message.css('color', 'rgba(229, 227, 223, 0)');
+                $message = $('<div></div>').append($message);
+                $message.addClass('fancy');
+            }
+
+            if (action && cool_bois.includes(nick.toLowerCase())) {
+                $message.addClass('rainbow_text_animated');
                 $message.css('color', 'rgba(229, 227, 223, 0)');
                 $message = $('<div></div>').append($message);
                 $message.addClass('fancy');
